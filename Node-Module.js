@@ -293,6 +293,7 @@ var ComponentScriptCommand = {
         return scriptCommand;
     },
 
+
     _addDescription : function(scriptCommand, baseComp, methodName, args) {
         function stringify(obj) { try { return JSON.stringify(obj); } catch(ex) { return "[ex]"; } }
         function createArgsDesc(obj) {
@@ -307,18 +308,19 @@ var ComponentScriptCommand = {
         scriptCommand.cmd.toString = function() { return moduleName.toLowerCase() + "/"; };
 
         for (var caller = arguments.callee.caller, i = 0; caller && i < 3; ++i) caller = caller.caller;
-        scriptCommand.source = caller && `${caller.filename}:${caller.lineNumber}`;
+        scriptCommand.source = caller && `${caller.filename}:${Utils.getCallerLinerNumber(7)}`;
 
         var argsDesc = createArgsDesc(args);
         if(!methodName){
             console.log("ok")
         }
-        debugger;
         var desc = methodName ? `${methodName}(${argsDesc || ""})` : scriptCommand.toString();
         for (var comp = baseComp; comp && comp.resolvingData; comp = comp.resolvingData.contextComponent)
             if (!comp.resolvingData.contextComponent || !comp.resolvingData.contextComponent._meta_.model.delegates)
                 desc = `${comp._dispName || comp._meta_.model.name}${stringify(comp.resolvingData.rawArgs)}.${desc}`;
-        scriptCommand.desc = `${moduleName}: ${desc} :${caller && caller.lineNumber}`;
+
+        //scriptCommand.desc = `${moduleName}: ${desc} :${caller && caller.lineNumber}`;
+        scriptCommand.desc = `${moduleName}: ${desc} :${caller && Utils.getCallerLinerNumber(7)}`;
         scriptCommand.moduleName = moduleName;
         scriptCommand.lineNumber = caller.lineNumber;
         this.CovarageReport && this.CovarageReport.docMode() && this.CovarageReport.loadedCommands.push(`${moduleName.toLowerCase()}.${desc}`,`${moduleName.toLowerCase()}`);
@@ -504,6 +506,8 @@ var baseComponentModel = {
         }
     }
 };
+
+
 
 module.exports = function(url, model) {
     console.log("inside Module js")
