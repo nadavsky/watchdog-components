@@ -146,7 +146,7 @@ var basicActions = {
                             action.verifyThat.contains(
                                 `elem '${target}' text `,
                                 wildcatUtils.getText(elem, "textContent"),
-                                value,
+                                value
                             );
                         } else {
                             action.verifyThat.contains(
