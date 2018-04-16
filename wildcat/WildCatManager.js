@@ -5,13 +5,13 @@ var currentConfig = {};
 var ErrorHandler = require("./ErrorHandler.js");
 var Log = require("./CustomLogger.js");
 var config = require("./EnvConfig.js");
-var Utils = require("kennelUtils.js");
+//var Utils = require("kennelUtils.js");
 
 
 var WildCatUtils = {
         init: function (server, platform) {
-            var env = Utils.getPref("watchdog.wildcat.Env") || 'Local';
-            var device = Utils.getPref("watchdog.wildcat.platform") || "Device type not set";
+            var env = getPref("watchdog.wildcat.Env") || 'Local';
+            var device = getPref("watchdog.wildcat.platform") || "Device type not set";
             platform = (!platform && device.indexOf("android") > -1) ? "android" : device.indexOf("ios") > -1 ? "ios" : "chrome" ;
             currentConfig["platform"] = platform;
             currentConfig["env"] = env;
@@ -32,8 +32,8 @@ var WildCatUtils = {
             currentConfig["platform"] = platform;
 
             var caps = config.getCaps(platform, env, device, server || "appium");
-            var storeUrl = Utils.getPref("watchdog.localStoreUrl");
-            caps.app = storeUrl ? storeUrl : Utils.getPref("watchdog.wildcat.appUrl");
+            var storeUrl = getPref("watchdog.localStoreUrl");
+            caps.app = storeUrl ? storeUrl : getPref("watchdog.wildcat.appUrl");
 
             currentConfig["AppiumCaps"] = {"desiredCapabilities": caps};
             currentConfig["SelendroidCaps"] = {desiredCapabilities: {
@@ -68,20 +68,20 @@ var WildCatUtils = {
 
         setSessionId: function (sessionId, appium = false) {
             currentConfig[appium ? "sessionIdAppium" : "sessionId"] = sessionId;
-            Utils.setPref("watchdog.wildcat.runTime.sessionId", sessionId)
+            setPref("watchdog.wildcat.runTime.sessionId", sessionId)
         },
 
         getSessionId: function (appium = false) {
-            return Utils.getPref("watchdog.wildcat.runTime.sessionId") || currentConfig[appium ? "sessionIdAppium" : "sessionId"];
+            return getPref("watchdog.wildcat.runTime.sessionId") || currentConfig[appium ? "sessionIdAppium" : "sessionId"];
             //return  currentConfig[appium ? "sessionIdAppium" : "sessionId"];
         },
 
         getBundleId :function(){
-            return Utils.getPref("watchdog.wildcat.androidPackage") || config.android[currentConfig.env].androidPackage;
+            return getPref("watchdog.wildcat.androidPackage") || config.android[currentConfig.env].androidPackage;
         },
 
         getAppPath :function(){
-            return Utils.getPref("watchdog.wildcat.appUrl") || config[currentConfig.platform][currentConfig.env].app;
+            return getPref("watchdog.wildcat.appUrl") || config[currentConfig.platform][currentConfig.env].app;
         },
 
         getStoreUrl : function(){
@@ -173,11 +173,11 @@ var WildCatUtils = {
         },
 
         getElemId: function () {
-            return Utils.getPref("watchdog.wildcat.runTime.elemId") || currentConfig["elemId"];
+            return getPref("watchdog.wildcat.runTime.elemId") || currentConfig["elemId"];
         },
 
         getOutputPath: function () {
-            return Utils.getPref("watchdog.outputPath");
+            return getPref("watchdog.outputPath");
         },
 
 

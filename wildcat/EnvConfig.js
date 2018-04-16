@@ -6,7 +6,7 @@
     var ErrorHandler = require("./ErrorHandler.js");
     var config = require("./Config.js");
     var Log = require("./CustomLogger.js");
-    var Utils = require("kennelUtils.js");
+    //var Utils = require("kennelUtils.js");
 
     var mergeOptions = function(obj1,obj2){
         var obj3 = {};
@@ -35,20 +35,20 @@
             Log.print("in get caps platform :" + platform + " env :" + env + " device :" + device + " serverName :" + serverName );
             var currentCaps =  {};
             if (platform === 'ios' || platform === 'android') {
-                currentCaps["platform"]= Utils.getPref("watchdog.wildcat.platform");
-                currentCaps["Appium_IP"] = Utils.getPref("watchdog.appiumIp");
+                currentCaps["platform"]= getPref("watchdog.wildcat.platform");
+                currentCaps["Appium_IP"] = getPref("watchdog.appiumIp");
                 currentCaps = mergeOptions(config[platform].general, currentCaps);
-                currentCaps["deviceName"] = Utils.getPref("watchdog.wildcat.deviceName");
+                currentCaps["deviceName"] = getPref("watchdog.wildcat.deviceName");
                 currentCaps["env"]= env;
-                currentCaps["androidPackage"] = Utils.getPref("watchdog.wildcat.androidPackage");
-                currentCaps["appPackage"] = Utils.getPref("watchdog.wildcat.androidPackage");
+                currentCaps["androidPackage"] = getPref("watchdog.wildcat.androidPackage");
+                currentCaps["appPackage"] = getPref("watchdog.wildcat.androidPackage");
 
             }
             if (platform === 'android'){
                 currentCaps["nativeWebScreenshot"] = true;
                 currentCaps["recreateChromeDriverSessions"] = true;
             }
-            if(Utils.getPref("watchdog.wildcat.chromeBrowser")){
+            if(getPref("watchdog.wildcat.chromeBrowser")){
                 currentCaps["browserName"] = "Chrome"
             }
 
@@ -58,7 +58,7 @@
         },
 
         getAppiumIP : function(platform,device){
-            var ip = Utils.getPref("watchdog.wildcat.appiumIp") || config[platform].servers.connectedDevices[device].Appium_IP;
+            var ip = getPref("watchdog.wildcat.appiumIp") || config[platform].servers.connectedDevices[device].Appium_IP;
             Log.print("The Appium_IP is : " + ip);
             return ip;
         },
