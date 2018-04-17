@@ -2,16 +2,17 @@
  * Created by milkana on 15/07/15.
  */
 var currentConfig = {};
+var request= require("sync-request");
 var ErrorHandler = require("./ErrorHandler.js");
 var Log = require("./CustomLogger.js");
 var config = require("./EnvConfig.js");
-//var Utils = require("kennelUtils.js");
+
 
 
 var WildCatUtils = {
         init: function (server, platform) {
-            var env = getPref("watchdog.wildcat.Env") || 'Local';
-            var device = getPref("watchdog.wildcat.platform") || "Device type not set";
+            var env = getPref("wildcat_env") || 'Local';
+            var device = getPref("wildcat_platform") || "Device type not set";
             platform = (!platform && device.indexOf("android") > -1) ? "android" : device.indexOf("ios") > -1 ? "ios" : "chrome" ;
             currentConfig["platform"] = platform;
             currentConfig["env"] = env;
@@ -21,26 +22,25 @@ var WildCatUtils = {
             }
             else if (env !== "Local") {
                 currentConfig["Appium_IP"] =  config.getAppiumIP(platform, device);
-                //currentConfig["Selendroid_IP"] = config.getSelendroidIP(platform,env);
-                //currentConfig["StoreUrl"] = config.getSelendroidStartUrl(platform,env) || "http://127.94.0.3:4444";
+                currentConfig["selenium_IP"] = config.getSelendroidIP(platform,env);
             }
             else {
                 currentConfig["Appium_IP"] = "http://127.0.0.1:4723";
-                //currentConfig["Selendroid_IP"] = config.getSelendroidIP(platform,env) || "http://127.94.0.3:4444";
-                //currentConfig["StoreUrl"] = config.getSelendroidStartUrl(platform,env) || "http://127.94.0.3:4444";
+                currentConfig["selenium_IP"] = config.getSelendroidIP(platform,env) || "there is no selenium ip";
+
             }
             currentConfig["platform"] = platform;
 
             var caps = config.getCaps(platform, env, device, server || "appium");
-            var storeUrl = getPref("watchdog.localStoreUrl");
-            caps.app = storeUrl ? storeUrl : getPref("watchdog.wildcat.appUrl");
+            var appUrl = getPref("wildcat_localAppUrl");
+            caps.app = appUrl ? appUrl : getPref("wildcat_appUrl");
 
             currentConfig["AppiumCaps"] = {"desiredCapabilities": caps};
             currentConfig["SelendroidCaps"] = {desiredCapabilities: {
                 browserName: "chrome"
             }};
 
-            currentConfig["host"] = platform === "chrome" ? currentConfig["Selendroid_IP"] : currentConfig["Appium_IP"];
+            currentConfig["host"] = platform === "chrome" ? currentConfig["selenium_IP"] : currentConfig["Appium_IP"];
 
             Log.print("We are using the follow configuration now " +  JSON.stringify(currentConfig));
             //Log.print("The used capabilities are device is "       +  JSON.stringify(caps));
@@ -68,20 +68,20 @@ var WildCatUtils = {
 
         setSessionId: function (sessionId, appium = false) {
             currentConfig[appium ? "sessionIdAppium" : "sessionId"] = sessionId;
-            setPref("watchdog.wildcat.runTime.sessionId", sessionId)
+            setPref("wildcat_runTime_sessionId", sessionId)
         },
 
         getSessionId: function (appium = false) {
-            return getPref("watchdog.wildcat.runTime.sessionId") || currentConfig[appium ? "sessionIdAppium" : "sessionId"];
+            return getPref("wildcat_runTime_sessionId") || currentConfig[appium ? "sessionIdAppium" : "sessionId"];
             //return  currentConfig[appium ? "sessionIdAppium" : "sessionId"];
         },
 
         getBundleId :function(){
-            return getPref("watchdog.wildcat.androidPackage") || config.android[currentConfig.env].androidPackage;
+            return getPref("wildcat_androidPackage") || config.android[currentConfig.env].androidPackage;
         },
 
         getAppPath :function(){
-            return getPref("watchdog.wildcat.appUrl") || config[currentConfig.platform][currentConfig.env].app;
+            return getPref("wildcat_appUrl") || config[currentConfig.platform][currentConfig.env].app;
         },
 
         getStoreUrl : function(){
@@ -102,45 +102,38 @@ var WildCatUtils = {
             };
 
             var props = this.props;
-            var xhr = new XMLHttpRequest();
             var url = _buildUrl(this.props.relPath, this.props.absPath);
-            var responseText;
-            //var url = this.props.relPath;
+            var responseText ,resBody;
+
 
 
             Log.print("before sending xhr request " + url );
-            xhr.open(props.method, url, async);
-            xhr.setRequestHeader("Accept", "application/json");
-            xhr.setRequestHeader("Content-type", "application/json");
-            xhr.onerror = function (e) {
-                Log.print("The request failed." + JSON.stringify(xhr) +   JSON.stringify(e));
-                props.cb(ErrorHandler(`Wildcat didn't succeed to receive response. Please check if the server is up : ${currentConfig.host}`), null);
-            };
-            xhr.onload = function (e) {
+            var headers = {"Accept": "application/json","Content-type": "application/json"}
+            var response = request(props.method, url, {headers:headers, timeout:10000, body:props.data});
+            Log.print("---> REQUEST " + props.method + " " + url + " data: " + JSON.stringify(props.data));
 
-                try {
-                    var response = JSON.parse(xhr.responseText);
+
+            if (response) {
+                try{
+                    resBody = JSON.parse(response.body.toString('utf-8'));
                 }
-                catch (e) {
+                catch (e){
                     Log.print("Exception : " + JSON.stringify(e));
-                    props.cb("the response is not in JSON format", this.responseText);
+                    props.cb("the response is not in JSON format", JSON.stringify(resBody));
                 }
-                if (response && JSON.stringify(responce).length > 100000)  responseText = "responseText is too long... you can find it in your network tab." ;
-                else responseText = JSON.stringify(responce)
-                Log.print("<--- RESPONCE status " + xhr.status + " " + url + " " + responseText);
-                if (xhr.status == 200) {props.cb(null, this.responseText, response);}
-                else {props.cb(ErrorHandler(xhr.status), null,response);
+                if (response && resBody.toString('utf-8').length > 100000)  responseText = "responseText is too long... you can find it in your network tab." ;
+                else responseText = response.body.toString('utf-8');
+                Log.print("<--- RESPONSE status " + response.statusCode + " " + url + " " + responseText);
+                if (response.statusCode == 200) {props.cb(null, responseText, response);}
+                else {
+                    props.cb(ErrorHandler(xhr.status), null,response);
                     //throw new ErrorHandler(xhr && xhr.responseText);
                 }
-            };
-
-            Log.print("---> REQUEST " + props.method + " " + url + " data: " + JSON.stringify(props.data));
-            try {
-                if(async) xhr.timeout = 5000;
-                xhr.send(props.data);
             }
-            catch(e){
-                props.cb("The server is down.... " + `Wildcat didn't succeed to receive response. Please check if the server is up : ${currentConfig.host}`, this.responseText)
+            else {
+
+                Log.print("The request failed." + JSON.stringify(xhr) +   JSON.stringify(e));
+                props.cb(ErrorHandler(`Wildcat didn't succeed to receive response. Please check if the server is up : ${currentConfig.host}`), null);
             }
 
         },
@@ -169,11 +162,11 @@ var WildCatUtils = {
 
         setElemId: function (elemId) {
             currentConfig["elemId"] = elemId;
-            Utils.setPref("watchdog.wildcat.runTime.elemId", elemId)
+            Utils.setPref("wildcat_runTime_elemId", elemId)
         },
 
         getElemId: function () {
-            return getPref("watchdog.wildcat.runTime.elemId") || currentConfig["elemId"];
+            return getPref("watchdog_wildcat_runTime_elemId") || currentConfig["elemId"];
         },
 
         getOutputPath: function () {
@@ -201,26 +194,20 @@ function _buildUrl(relPath, absPath){
     Log.print("Using crossWalk " + WildCatUtils.isUsingCrossWalk());
     var isAppiumCmd = (relPath && relPath.indexOf("screenshot") > 0)||(relPath && relPath.indexOf("appium") > 0) || (absPath && absPath.indexOf("appium") > 0) ? true : false;
     var sessionNow = "nosession";
+    var path;
 
-    if(WildCatUtils.isUsingCrossWalk() && !isAppiumCmd) {
-        currentConfig.host = currentConfig.CrossWalk_IP;
+    if(WildCatUtils.isRunningChromeNow() && !isAppiumCmd){
+        currentConfig.host = currentConfig.selenium_IP;
         sessionNow =  currentConfig["sessionId"];
-    }
-    else if(WildCatUtils.isRunningChromeNow() && !isAppiumCmd){
-        currentConfig.host = currentConfig.Selendroid_IP;
-        sessionNow =  currentConfig["sessionId"];
+        path = currentConfig.host
     }
     else{
         currentConfig.host = currentConfig.Appium_IP;
         sessionNow =  currentConfig["sessionId"];
+        path = currentConfig.host + "/wd/hub"
     }
-    var path = currentConfig.host;
-    if(relPath) {
-        if (currentConfig.host === currentConfig.Appium_IP  || currentConfig.host === currentConfig.Selendroid_IP ) {
-            path += "/wd/hub"
-        }
-        path += relPath;
-    }
+
+    if(relPath) path += relPath;
     if(absPath) path += absPath;
 
     path = path.replace(":sessionId", sessionNow);//.replace(":id", currentConfig["elemId"]);
