@@ -191,7 +191,6 @@ function deepCopy(oldObj,att) {
 
 
 function _buildUrl(relPath, absPath){
-    Log.print("Using crossWalk " + WildCatUtils.isUsingCrossWalk());
     var isAppiumCmd = (relPath && relPath.indexOf("screenshot") > 0)||(relPath && relPath.indexOf("appium") > 0) || (absPath && absPath.indexOf("appium") > 0) ? true : false;
     var sessionNow = "nosession";
     var path;
@@ -211,7 +210,6 @@ function _buildUrl(relPath, absPath){
     if(absPath) path += absPath;
 
     path = path.replace(":sessionId", sessionNow);//.replace(":id", currentConfig["elemId"]);
-    Log.print("The path that we ar going to use is " + path);
     return path;
 };
 

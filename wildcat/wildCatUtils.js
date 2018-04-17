@@ -265,7 +265,6 @@ var commands = {
         var currentConfig = utils.init();
         var session;
         utils.sendRequest('GET','/sessions',  callb.withData(function(err,obj){
-            console.log("after GET request in get sessions");
             if(!err){
                 session= obj.value[0] && obj.value[0].id;
             }
@@ -394,7 +393,6 @@ var commands = {
         var data = JSON.stringify(ElemStrategies(elemSelector));
         var session = this.getSession();
         var element;
-        console.log("+!+!+!+!+!+!+!+!+!    " + session);
         if(context){
             utils.sendRequest({
                 method: 'POST',

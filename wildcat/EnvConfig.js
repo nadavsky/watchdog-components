@@ -32,7 +32,7 @@
         //env         =  Dev, QA_Beta, QA_Stable ...
         //serverName =  appium/crosswalk
         getCaps: function(platform,env,device,serverName){
-            Log.print("in get caps platform :" + platform + " env :" + env + " device :" + device + " serverName :" + serverName );
+            Log.print("in get caps, platform =" + platform + ", env =" + env + ", device =" + device + ", serverName =" + serverName );
             var currentCaps =  {};
             if (platform === 'ios' || platform === 'android') {
                 currentCaps["platform"]= getPref("watchdog.wildcat.platform");
