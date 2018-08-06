@@ -510,7 +510,6 @@ var baseComponentModel = {
 
 
 module.exports = function(url, model) {
-    console.log("inside Module js")
     var module = Module.create(url, model);
     return (module.proxy = Module.wrapWithProxy(module));
 };
