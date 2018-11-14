@@ -213,8 +213,15 @@ var basicActions = {
                 action.end();
             });
         });
-
-
+        //basicActions.maximize_window()
+    },
+    maximize_window : function(){
+        cmd("maximize_window...", function(action) {
+            wildcatUtils.maximize_window( {},function(endAction, str, Obj) {
+                if( Obj.value && Obj.value["message"]) action.verifyThat.fatal("failed to maximize_window : " + Obj.value["message"]);
+                action.end();
+            });
+        });
     },
 
     toggleWiFi : function(){

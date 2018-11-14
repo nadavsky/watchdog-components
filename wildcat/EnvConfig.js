@@ -48,8 +48,12 @@
                 currentCaps["nativeWebScreenshot"] = true;
                 currentCaps["recreateChromeDriverSessions"] = true;
             }
-            if(getPref("watchdog.wildcat.chromeBrowser")){
-                currentCaps["browserName"] = "Chrome"
+            if(platform === 'chrome'){
+                currentCaps["browserName"] = "Chrome";
+                currentCaps["chromeOptions"]= {
+                    profile:{content_settings: {exceptions:{media_stream_camera:{"mcu.client.dev.mavenir-ngn.com:4432,*":{"last_modified":"13175600898836375","setting":1},"127.0.0.1:4431":{"last_modified":"13175600898836375","setting":1}}}}
+                    }
+                }
             }
 
 

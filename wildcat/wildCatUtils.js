@@ -191,6 +191,17 @@ var commands = {
             data: JSON.stringify({url: data})
         });
     },
+    maximize_window: function(data, cb){
+        var session = commands.getSession();
+        var window_handle = commands.getLastOpenedWindowId()
+        utils.sendRequest({
+            method: 'POST',
+            relPath: '/session/' + session + '/window/' + window_handle + '/maximize',
+            cb: function(non,resString,respObj){cb(non,resString,respObj)},
+            data: JSON.stringify({url: data})
+        });
+    },
+
 
 
     // <editor-fold desc="Session">
