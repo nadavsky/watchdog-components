@@ -35,10 +35,8 @@ var WildCatUtils = {
             var appUrl = getPref("wildcat_localAppUrl");
             caps.app = appUrl ? appUrl : getPref("wildcat_appUrl");
 
-            currentConfig["AppiumCaps"] = {"desiredCapabilities": caps};
-            currentConfig["SelendroidCaps"] = {desiredCapabilities: {
-                browserName: "chrome"
-            }};
+            currentConfig["AppiumCaps"] = {desiredCapabilities: caps};
+            currentConfig["SelendroidCaps"] = {desiredCapabilities:caps};
 
             currentConfig["host"] = platform === "chrome" ? currentConfig["selenium_IP"] : currentConfig["Appium_IP"];
 
