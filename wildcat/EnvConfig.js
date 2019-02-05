@@ -49,29 +49,7 @@
                 currentCaps["recreateChromeDriverSessions"] = true;
             }
             if(platform === 'chrome') {
-                currentCaps['goog:chromeOptions'] = {
-                    prefs: {
-                        profile: {
-                            content_settings: {
-                                exceptions: {
-                                    media_stream_camera: {
-                                        "https://mcu.client.test.mavenir-ngn.com:4432,*": {
-                                            'last_modified': "13175600898836375",
-                                            'setting': 1
-                                        },
-                                        "127.0.0.1:4431": {'last_modified': "13175600898836375", 'setting': 1}
-                                    },
-                                    media_stream_mic: {
-                                        "https://mcu.client.test.mavenir-ngn.com:4432,*": {
-                                            'last_modified': "13175600898836375",
-                                            'setting': 1
-                                        }
-                                    }
-                                }
-                            }
-                        }
-                    }
-                }
+                currentCaps = mergeOptions(getPref("desiredCapabilities"), currentCaps);
             }
             Log.print("the choosen caps are " + JSON.stringify(currentCaps));
             return currentCaps;
