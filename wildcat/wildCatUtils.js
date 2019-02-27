@@ -35,8 +35,8 @@ var commands = {
         "attrValue"       : "attrValue"
     },
 
-    init :function () {
-        utils.init();
+    init :function (sessionName) {
+        var session = utils.init();
     },
 
     TouchActions : {
@@ -259,9 +259,9 @@ var commands = {
         return window_handle;
     },
 
-    setWindowFocus : function(cb){
+    setWindowFocus : function(session){
         var failed;
-        var session = commands.getSession();
+        var session = session || commands.getSession();
         var getCurrentWindowId = JSON.stringify({"name" : commands.getLastOpenedWindowId()});
         utils.sendRequest({
             method: 'POST',
@@ -272,16 +272,16 @@ var commands = {
         return !failed;
     },
 
-    getSession : function(installApp){
-        var currentConfig = utils.init();
-        var session;
-        utils.sendRequest('GET','/sessions',  callb.withData(function(err,obj){
+    getSession : function(createNewSession){
+        console.log("on get session................")
+        //var currentConfig = utils.init();
+        /*utils.sendRequest('GET','/sessions',  callb.withData(function(err,obj){
             if(!err){
                 session= obj.value[0] && obj.value[0].id;
             }
-        },this));
-        if (session){
-            utils.setSessionId(session);
+        },this));*/
+        if (!createNewSession){
+            var session = getPref("wildcat_current_session");
             return session;
         }
         else{
@@ -298,33 +298,13 @@ var commands = {
             return session;
         }
 
-
-
-       /* var currentConfig = utils.init();
-        console.log("in get session , currentConfig['sessionId'] = " + currentConfig["sessionId"]);
-        if(this.isConnected()){
-            if(utils.getSessionId()) return utils.getSessionId();
-            else {
-                connect();
-                return session;
-            }
-        }
-        else connect();
+    },
+    useSession: function(name){
+        debugger
+        var session = getPref("wildcat_sessions")[name];
+        console.log("use session : " + session)
+        setPref("wildcat_current_session", session);
         return session;
-
-        function connect(){
-            utils.sendRequest('POST','/session',  callb.withData(function(err,obj){
-                console.log("after request in get session");
-                if(!err){
-                    session = obj["sessionId"];
-                    utils.setSessionId(session);
-                }
-                else  {
-                    utils.sendRequest('DELETE', '/session/'+currentConfig["sessionId"], callb.basic());
-                    return this.getSession();
-                }
-            },this),JSON.stringify(utils.getCurrentCaps(installApp)));
-        }*/
 
     },
 
@@ -400,7 +380,7 @@ var commands = {
     //find element single try
     //elem selector should be in one of the following formats:
         // xpath:*, id:*, css:*, tagName:*, className: *
-    findElem : function(elemSelector,context) {
+    findElem : function(elemSelector,context,session) {
         var data = JSON.stringify(ElemStrategies(elemSelector));
         var session = this.getSession();
         var element;

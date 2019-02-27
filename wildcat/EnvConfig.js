@@ -51,6 +51,8 @@
             if(platform === 'chrome') {
                 currentCaps = mergeOptions(getPref("desiredCapabilities"), currentCaps);
             }
+
+
             Log.print("the choosen caps are " + JSON.stringify(currentCaps));
             return currentCaps;
         },

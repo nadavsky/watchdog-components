@@ -240,6 +240,21 @@ var basicActions = {
             });
         });
     },
+
+    createSession: function (name) {
+        cmd("create new session", function(action){
+            var session= wildcatUtils.getSession(true);
+            var sessionsObj = getPref("wildcat_sessions");
+            if (!sessionsObj) sessionsObj={};
+            sessionsObj[name]= session;
+            debugger
+            setPref("wildcat_sessions", sessionsObj);
+            wildcatUtils.useSession(name);
+            action.end();
+        })
+    }
+
+
 };
 
 module.exports = basicActions;
