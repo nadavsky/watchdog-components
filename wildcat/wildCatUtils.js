@@ -224,7 +224,7 @@ var commands = {
 
     //delete session
 
-    deleteSession: function(cb){
+    deleteSession: function(session, cb){
       /*  commands.setStoreView(()=>{
             commands.execute("$user && $user.logout();",null,"both",function(err,value){
                 if(utils.isUsingCrossWalk()) {
@@ -237,10 +237,10 @@ var commands = {
         });*/
       if(utils.isUsingCrossWalk()) {
             utils.usingCrossWalk(true);
-            utils.sendRequest('DELETE', '/session/:sessionId', callb.basic(cb));
+            utils.sendRequest('DELETE', '/session/' + session, callb.basic(cb));
         }
         utils.usingCrossWalk(false);
-        utils.sendRequest('DELETE', '/session/:sessionId', callb.basic(cb));
+        utils.sendRequest('DELETE', '/session/' + session, callb.basic(cb));
     },
 
     sessions: function(cb){utils.sendRequest('GET','/sessions', callb.withData(cb));},
