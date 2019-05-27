@@ -1,8 +1,29 @@
 /**
  * Created by nadav on 9/6/17.
  */
+
 var wildcatUtils = require("./wildCatUtils.js");
-var basicActions = module.exports = require("Node-Module.js")(module.url, {
+
+var BASICACTIONS = module.exports = require("Node-Module.js")(module.url,{
+    id: "BasicActions",
+        name: "BasicActions",
+    argsMap: {
+        find: []
+},
+    find: function(fd){
+        return [{}]
+    },
+    actionProps: {
+        collectData: function(){
+        }
+    },
+    instance:{
+        actionUtils: {},
+        getters: {}
+    }
+});
+module.exports.registerComponent([
+    {
     id: "basicActions",
     name: "basicActions",
     argsMap: {
@@ -317,4 +338,4 @@ var basicActions = module.exports = require("Node-Module.js")(module.url, {
         },
         getters: {}
     }
- })
+ }])
