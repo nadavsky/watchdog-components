@@ -527,7 +527,7 @@ var commands = {
        });
    },
 
-   clearContent: function(cb){utils.sendRequest('POST','/session/:sessionId/element/:id/clear', callb.basic(cb));},
+   clearContent: function(elem, cb){utils.sendRequest('POST','/session/:sessionId/element/'+elem+'/clear', callb.basic(cb));},
 
    contexts : function(cb){
        var session = this.getSession();
@@ -625,7 +625,6 @@ var commands = {
         });
         return value;
     },
-
     getAttrValue : function(target, attr){
         var session = this.getSession(),
             value= "";
