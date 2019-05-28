@@ -68,7 +68,7 @@
         },
 
         getSelendroidIP :function(platform,env){
-            return config[platform].env[env].ip;
+            return getPref("seleniumIP") || config[platform].env[env].ip;
         },
 
         getSelendroidStartUrl :function(platform,env){
