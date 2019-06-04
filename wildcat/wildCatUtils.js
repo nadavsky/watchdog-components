@@ -28,6 +28,7 @@ var commands = {
 
     verifyElemMethods : {
         "getText"         : "getText",
+        "getValue"        : "getValue",
         "isElemDisplayed" : "isElemDisplayed",
         "elemSize"        : "elemSize",
         "cssProperty"     : "cssProperty",
@@ -622,6 +623,18 @@ var commands = {
             cb: callb.withData(function(err, obj){
                 value=obj["value"];
                }, this)
+        });
+        return value;
+    },
+    getValue : function(elem){
+        var session = this.getSession(),
+            value= "";
+        utils.sendRequest({
+            method: 'GET',
+            relPath: '/session/' + session + '/element/' + elem + '/value',
+            cb: callb.withData(function(err, obj){
+                value=obj["value"];
+            }, this)
         });
         return value;
     },
