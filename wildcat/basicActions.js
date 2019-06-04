@@ -31,6 +31,7 @@ module.exports.registerComponent([
         "type": ["target", "value", "context", "props"],
         "clearContent": ["target", "context"],
         "getText": ["target","context", "props"],
+        "getValue": ["target","context", "props"],
         "setFocus": ["target", "context", "props"],
         "nativeType": ["value", "context", "props"],
         "swipeElement": ["target", "context", "props"],
@@ -100,6 +101,19 @@ module.exports.registerComponent([
                         },
                         function (elem) {
                             action.context = wildcatUtils.getText(elem, "textContent");
+                            a.end();
+                        }
+                    );
+                });
+            },
+            getValue: function (action) {
+                cmd("get text from '" + action.args.target + "'", function (a) {
+                    a.findTarget(
+                        function () {
+                            return wildcatUtils.findElem(action.args.target, action.args.context);
+                        },
+                        function (elem) {
+                            action.context = wildcatUtils.getValue(elem, "textContent");
                             a.end();
                         }
                     );
