@@ -43,6 +43,7 @@ module.exports.registerComponent([
         "androidBack": [],
         "androidHome": [],
         "setFocusToCurrnetWindow": [],
+        "setParentFocus" : [],
         "waitForElement": ["target", "timeout", "context"],
         "navigateTo": ["url"],
         "maximize_window": [],
@@ -273,6 +274,14 @@ module.exports.registerComponent([
             setFocusToCurrnetWindow: function (action) {
                 cmd("set Focus ToCurrnet Window", function (a) {
                     var isSet = wildcatUtils.setWindowFocus();
+                    if (!isSet) action.verifyThat.fatal("set Focus ToCurrnet Window");
+                    a.end();
+                });
+
+            },
+            setParentFocus: function (action) {
+                cmd("set Focus ToCurrnet Window", function (a) {
+                    var isSet = wildcatUtils.setParentFocus();
                     if (!isSet) action.verifyThat.fatal("set Focus ToCurrnet Window");
                     a.end();
                 });
