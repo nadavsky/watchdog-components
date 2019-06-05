@@ -272,6 +272,19 @@ var commands = {
         });
         return !failed;
     },
+    setParentFocus : function(session){
+        var failed;
+        var session = session || commands.getSession();
+        var getCurrentWindowId = JSON.stringify({"name" : commands.getLastOpenedWindowId()});
+        utils.sendRequest({
+            method: 'POST',
+            relPath: '/session/' + session + '/frame/parent',
+            cb: function(non,resString,respObj){ var failed = respObj.value && respObj.value["message"]},
+            data: getCurrentWindowId
+        });
+        return !failed;
+    },
+
 
     getSession : function(createNewSession){
         console.log("on get session................")
