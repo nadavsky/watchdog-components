@@ -29,6 +29,7 @@ module.exports.registerComponent([
     argsMap: {
         "click": ["target", "props"],
         "type": ["target", "value", "context", "props"],
+        "typeOnly": ["target", "value", "context", "props"],
         "clearContent": ["target", "context"],
         "getText": ["target","context", "props"],
         "getValue": ["target","context", "props"],
@@ -82,6 +83,21 @@ module.exports.registerComponent([
                     );
                 });
             },
+            typeOnly: function (action) {
+                cmd("typeOnly '" + action.args.value + "' in '" + action.args.target + "'", function (a) {
+                    a.findTarget(
+                        function () {
+                            return wildcatUtils.findElem(action.args.target, action.args.context);
+                        },
+                        function (elem) {
+                            wildcatUtils.typeOnly(elem, action.args.value, function (endAction, str, Obj) {
+                                action.verifyThat.false("failed to type '" + action.args.value + "'", Obj.value && Obj.value["message"]);
+                                if (endAction) a.end();
+                            });
+                        }
+                    );
+                });
+            },
             clearContent: function (action) {
                 cmd("clearContent in '" + action.args.target + "'", function (a) {
                     a.findTarget(
@@ -108,7 +124,7 @@ module.exports.registerComponent([
                 });
             },
             getValue: function (action) {
-                cmd("get text from '" + action.args.target + "'", function (a) {
+                cmd("get value from '" + action.args.target + "'", function (a) {
                     a.findTarget(
                         function () {
                             return wildcatUtils.findElem(action.args.target, action.args.context);
@@ -280,7 +296,7 @@ module.exports.registerComponent([
 
             },
             setParentFocus: function (action) {
-                cmd("set Focus ToCurrnet Window", function (a) {
+                cmd("set Parent Focus ToCurrnet Window", function (a) {
                     var isSet = wildcatUtils.setParentFocus();
                     if (!isSet) action.verifyThat.fatal("set Focus ToCurrnet Window");
                     a.end();
