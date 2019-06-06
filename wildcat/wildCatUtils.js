@@ -540,6 +540,22 @@ var commands = {
            data: objValue
        });
    },
+    typeOnly :function(elem, value, cb, elemId){
+        function checkUnicode(value) {
+            return unicodeChars.hasOwnProperty(value) ? [unicodeChars[value]] : value.split('');
+        }
+
+        if(elemId) utils.setElemId(elemId);
+        var key = checkUnicode(value);
+        var objValue = JSON.stringify({"value" : key});
+        var session = this.getSession();
+        utils.sendRequest({
+            method: 'POST',
+            relPath: '/session/' + session + '/element/'+elem+'/value',
+            cb: function(non,resString,respObj){cb(true,resString,respObj)},
+            data: objValue
+        });
+    },
 
    clearContent: function(elem, cb){utils.sendRequest('POST','/session/:sessionId/element/'+elem+'/clear', callb.basic(cb));},
 
