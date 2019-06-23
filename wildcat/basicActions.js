@@ -33,6 +33,7 @@ module.exports.registerComponent([
         "clearContent": ["target", "context"],
         "getText": ["target","context", "props"],
         "getValue": ["target","context", "props"],
+        "getAttrValue":["element","attributeName","context"],
         "setFocus": ["target", "context", "props"],
         "nativeType": ["value", "context", "props"],
         "swipeElement": ["target", "context", "props"],
@@ -134,6 +135,21 @@ module.exports.registerComponent([
                             a.end();
                         }
                     );
+                });
+            },
+
+            getAttrValue: function (action) {
+                cmd("get attribute value for " + action.args.element + " element by "+action.args.attributeName+" attribute", function (a) {
+                            action.context = wildcatUtils.getAttrValue(action.args.element, action.args.attributeName);
+                            a.end();
+                });
+            },
+
+            switchToApp: function (action) { //switch to already run app. name should be the context name , use GET contexts
+                cmd("switch to app: '" + action.args.appName + "'", function (a) {
+                    var isSet = wildcatUtils.setContext("WEBVIEW_" + action.args.appName);
+                    if (!isSet) action.verifyThat.fatal("failed to switch app to '" + action.args.appName + "'")
+                    a.end();
                 });
             },
             setFocus: function (action) {
