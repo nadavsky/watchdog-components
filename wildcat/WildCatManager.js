@@ -160,7 +160,8 @@ var WildCatUtils = {
 
         setElemId: function (elemId) {
             currentConfig["elemId"] = elemId;
-            Utils.setPref("wildcat_runTime_elemId", elemId)
+            //Utils.setPref("wildcat_runTime_elemId", elemId)
+            setPref("wildcat_runTime_elemId", elemId)
         },
 
         getElemId: function () {
