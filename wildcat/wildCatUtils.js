@@ -465,18 +465,27 @@ var commands = {
 
     findElems : function(elemSelector,cb){
         var data = JSON.stringify(ElemStrategies(elemSelector));
+        var session = this.getSession();
+        var elements
         utils.sendRequest({
             method: 'POST',
-            relPath: '/session/:sessionId/elements',
+            relPath: '/session/'+session+'/elements',
             cb: callb.withData(function(err, value){
                 if(value && value.hasOwnProperty("value")){
-                    utils.setElemId(value.value["ELEMENT"]);
-                    cb(null,value.value["ELEMENT"]);
+                   //utils.setElemId(value.value["ELEMENT"]);
+                    elements=value.value
+                    //cb(null,value.value["ELEMENT"]);
                 }
-                else cb(err,null);
+                else
+                {
+                    //cb(err,null);
+                }
+
             }, this),
             data: data
         });
+        console.log("in find elems, elements = "+ JSON.stringify(elements))
+        return elements ? [elements] : [];
     },
 
     tryToRecconnect : function(err){
