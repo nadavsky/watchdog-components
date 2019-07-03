@@ -31,7 +31,7 @@ module.exports.registerComponent([
         "type": ["target", "value", "context", "props"],
         "typeOnly": ["target", "value", "context", "props"],
         "clearContent": ["target", "context"],
-        "getText": ["target","context", "props"],
+        "getText": ["target","context","elem","props"],
         "getValue": ["target","context", "props"],
         "getAttrValue":["element","attributeName","context"],
         "setFocus": ["target", "context", "props"],
@@ -112,16 +112,21 @@ module.exports.registerComponent([
                     );
             },
             getText: function (action) {
-                cmd("get text from '" + action.args.target + "'", function (a) {
-                    a.findTarget(
-                        function () {
-                            return wildcatUtils.findElem(action.args.target, action.args.context);
-                        },
-                        function (elem) {
-                            action.context = wildcatUtils.getText(elem, "textContent");
-                            a.end();
-                        }
-                    );
+                cmd("get text from '" + action.args.target +action.args.elem+ "'", function (a) {
+                    if (action.args.elem) {
+                        action.context = wildcatUtils.getText(action.args.elem, "textContent");
+                        a.end();
+                    } else {
+                        a.findTarget(
+                            function () {
+                                return wildcatUtils.findElem(action.args.target, action.args.context);
+                            },
+                            function (elem) {
+                                action.context = wildcatUtils.getText(elem, "textContent");
+                                a.end();
+                            }
+                        );
+                    }
                 });
             },
             getValue: function (action) {
