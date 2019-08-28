@@ -326,7 +326,7 @@ module.exports.registerComponent([
             },
             waitForElement: function (action) {
                 cmd("wait For Element " + action.args.target, function (a) {
-                    if (action.args.timeout) a.timeout = timeout;
+                    if (action.args.timeout) a.timeout = action.args.timeout;
                     a.findTarget(
                         function () {
                             return wildcatUtils.findElem(action.args.target, action.args.context);
