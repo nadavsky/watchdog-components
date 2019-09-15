@@ -27,7 +27,7 @@ module.exports.registerComponent([
     id: "basicActions",
     name: "basicActions",
     argsMap: {
-        "click": ["target", "props"],
+        "click": ["target", "context", "props"],
         "type": ["target", "value", "context", "props"],
         "typeOnly": ["target", "value", "context", "props"],
         "clearContent": ["target", "context"],
@@ -52,7 +52,8 @@ module.exports.registerComponent([
         "toggleWiFi": [],
         "toggleAirplaneMode": [],
         "createSession": ["name"],
-        "deleteSession":["name"]
+        "deleteSession":["name"],
+        "hideKeyboard": []
 
     },
     instance: {
@@ -216,12 +217,12 @@ module.exports.registerComponent([
                         a.end();
 
                     }, 3000)
-                    setTimeout(function () {
-                        var isSet = wildcatUtils.setContext("WEBVIEW_" + action.args.appName);
-                        if (!isSet) action.verifyThat.fatal("failed to switch app to '" + action.args.appName + "'");
-                        a.end();
-
-                    }, 5000)
+                    // setTimeout(function () {
+                    //     var isSet = wildcatUtils.setContext("WEBVIEW_" + action.args.appName);
+                    //     if (!isSet) action.verifyThat.fatal("failed to switch app to '" + action.args.appName + "'");
+                    //     a.end();
+                    //
+                    // }, 5000)
                 });
             },
             switchToApp: function (action) { //switch to already run app. name should be the context name , use GET contexts
@@ -393,7 +394,15 @@ module.exports.registerComponent([
 
                     wildcatUtils.deleteSession(session, a.end);
                 });
-            }
+            },
+            hideKeyboard: function (action) {
+                cmd("hide keyboard", function (a) {
+                    wildcatUtils.NativeActions.hideKeyboard(function (endAction, str, Obj) {
+                        if (Obj && Obj.value && Obj.value["message"]) action.verifyThat.fatal("failed to hide Keyboard : " + Obj.value["message"]);
+                        a.end();
+                    });
+                });
+            },
 
         },
         getters: {}
