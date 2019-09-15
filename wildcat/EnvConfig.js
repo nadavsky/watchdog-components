@@ -34,19 +34,20 @@
         getCaps: function(platform,env,device,serverName){
             Log.print("in get caps, platform =" + platform + ", env =" + env + ", device =" + device + ", serverName =" + serverName );
             var currentCaps =  {};
-            if (platform === 'ios' || platform === 'android') {
-                currentCaps["platform"]= getPref("watchdog.wildcat.platform");
-                currentCaps["Appium_IP"] = getPref("watchdog.appiumIp");
+             if (platform === 'ios' || platform === 'Android') {
+                currentCaps["platformName"]= platform;
+                currentCaps["platformVersion"]= getPref("watchdog.wildcat.platformVersion");
                 currentCaps = mergeOptions(config[platform].general, currentCaps);
                 currentCaps["deviceName"] = getPref("watchdog.wildcat.deviceName");
+                currentCaps["automationName"] = "Appium";
                 currentCaps["env"]= env;
-                currentCaps["androidPackage"] = getPref("watchdog.wildcat.androidPackage");
-                currentCaps["appPackage"] = getPref("watchdog.wildcat.androidPackage");
-
-            }
-            if (platform === 'android'){
+                currentCaps["appPackage"] = getPref("watchdog.wildcat.appPackage");
+                currentCaps["appActivity"] = getPref("watchdog.wildcat.appActivity");
+             }
+            if (platform === 'Android'){
                 currentCaps["nativeWebScreenshot"] = true;
                 currentCaps["recreateChromeDriverSessions"] = true;
+                currentCaps = mergeOptions(getPref("desiredCapabilities"), currentCaps);
             }
             if(platform === 'chrome') {
                 currentCaps = mergeOptions(getPref("desiredCapabilities"), currentCaps);
