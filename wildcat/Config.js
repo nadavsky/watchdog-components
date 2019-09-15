@@ -97,7 +97,7 @@ var configs = {
         }
     },
 
-    "android": {
+    "Android": {
         "env": {
             "Dev": {
                 "app": "https://domain.apk",
