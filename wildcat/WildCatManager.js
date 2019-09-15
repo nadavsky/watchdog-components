@@ -13,7 +13,7 @@ var WildCatUtils = {
         init: function (server, platform) {
             var env = getPref("wildcat_env") || 'Local';
             var device = getPref("wildcat_platform") || "Device type not set";
-            platform = (!platform && device.indexOf("android") > -1) ? "android" : device.indexOf("ios") > -1 ? "ios" : "chrome" ;
+            platform = (!platform && device.indexOf("Android") > -1) ? "Android" : device.indexOf("ios") > -1 ? "ios" : "chrome" ;
             currentConfig["platform"] = platform;
             currentConfig["env"] = env;
 
@@ -25,7 +25,7 @@ var WildCatUtils = {
                 currentConfig["selenium_IP"] = config.getSelendroidIP(platform,env);
             }
             else {
-                currentConfig["Appium_IP"] = "http://127.0.0.1:4723";
+                currentConfig["Appium_IP"] = getPref("watchdog.wildcat.appiumIp") || "http://127.0.0.1:4723";
                 currentConfig["selenium_IP"] = config.getSelendroidIP(platform,env) || "there is no selenium ip";
 
             }
@@ -75,7 +75,7 @@ var WildCatUtils = {
         },
 
         getBundleId :function(){
-            return getPref("wildcat_androidPackage") || config.android[currentConfig.env].androidPackage;
+            return getPref("wildcat_appPackage") || config.android[currentConfig.env].androidPackage;
         },
 
         getAppPath :function(){
@@ -119,13 +119,12 @@ var WildCatUtils = {
                     Log.print("Exception : " + JSON.stringify(e));
                     props.cb("the response is not in JSON format", JSON.stringify(resBody));
                 }
-                if (response && resBody.toString('utf-8').length > 100000)  responseText = "responseText is too long... you can find it in your network tab." ;
+                if (response && resBody && resBody.toString('utf-8').length > 100000)  responseText = "responseText is too long... you can find it in your network tab." ;
                 else responseText = response.body.toString('utf-8');
                 Log.print("<--- RESPONSE status " + response.statusCode + " " + url + " " + responseText);
                 if (response.statusCode == 200) {props.cb(null, responseText, response);}
                 else {
-                    props.cb(ErrorHandler(xhr.status), null,response);
-                    //throw new ErrorHandler(xhr && xhr.responseText);
+                    props.cb(ErrorHandler(resBody.status), null,response);
                 }
             }
             else {
