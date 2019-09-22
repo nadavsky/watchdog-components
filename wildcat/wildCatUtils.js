@@ -746,8 +746,7 @@ var commands = {
                relPath: '/session/' + session + '/screenshot',
                cb: callb.withData(function(err, obj){
                     snapshot= obj && obj.value;
-           }, this),
-               data:{}
+           }, this)
        });
        return snapshot;
 

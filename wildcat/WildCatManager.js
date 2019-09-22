@@ -113,13 +113,14 @@ var WildCatUtils = {
 
             if (response) {
                 try{
-                    resBody = JSON.parse(response.body.toString('utf-8'));
+                    resBody = response.body.toString('utf-8');
                 }
                 catch (e){
                     Log.print("Exception : " + JSON.stringify(e));
                     props.cb("the response is not in JSON format", JSON.stringify(resBody));
                 }
-                if (response && resBody && resBody.toString('utf-8').length > 100000)  responseText = "responseText is too long... you can find it in your network tab." ;
+
+                if (response && resBody.toString('utf-8').length > 10000)  responseText = "responseText is too long... you can find it in your network tab." ;
                 else responseText = response.body.toString('utf-8');
                 Log.print("<--- RESPONSE status " + response.statusCode + " " + url + " " + responseText);
                 if (response.statusCode == 200) {props.cb(null, responseText, response);}
