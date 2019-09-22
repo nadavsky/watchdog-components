@@ -36,8 +36,9 @@ var commands = {
         "attrValue"       : "attrValue"
     },
 
-    init :function (sessionName) {
-        var session = utils.init();
+    init :function (server, platform) {
+       // var session = utils.init();
+        var session = utils.init(server, platform);
     },
 
     TouchActions : {
