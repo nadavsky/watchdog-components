@@ -13,7 +13,7 @@ var WildCatUtils = {
         init: function (server, platform) {
             var env = getPref("wildcat_env") || 'Local';
             var device = getPref("wildcat_platform") || "Device type not set";
-            platform = (!platform && device.indexOf("Android") > -1) ? "Android" : device.indexOf("ios") > -1 ? "ios" : "chrome" ;
+            platform = platform ? platform : (!platform && device.indexOf("Android") > -1) ? "Android" : device.indexOf("ios") > -1 ? "ios" : "chrome" ;
             currentConfig["platform"] = platform;
             currentConfig["env"] = env;
 
@@ -75,7 +75,7 @@ var WildCatUtils = {
         },
 
         getBundleId :function(){
-            return getPref("wildcat_appPackage") || config.android[currentConfig.env].androidPackage;
+            return getPref("wildcat_appPackage") || config.android[currentConfig.env].appPackage;
         },
 
         getAppPath :function(){
