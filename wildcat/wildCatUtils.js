@@ -738,17 +738,16 @@ var commands = {
 
    screenshot: function(cb) {
        var session= utils.getSessionId();
-       var snapshot;
-
+       var value;
        //utils.sendRequest('GET', '/session/' + session + '/screenshot', callb.withData(cb),{})
        utils.sendRequest({
            method: 'GET',
                relPath: '/session/' + session + '/screenshot',
                cb: callb.withData(function(err, obj){
-                    snapshot= obj && obj.value;
-           }, this)
+                   value=obj["value"];
+               }, this)
        });
-       return snapshot;
+       return value;
 
    }
 
