@@ -105,7 +105,7 @@ var WildCatUtils = {
 
 
 
-            Log.print("before sending xhr request " + url );
+            Log.print("before sending request " + url );
             var headers = {"Accept": "application/json","Content-type": "application/json"}
             var response = request(props.method, url, {headers:headers, timeout:10000, body:props.data});
             Log.print("---> REQUEST " + props.method + " " + url + " data: " + JSON.stringify(props.data));
@@ -119,18 +119,19 @@ var WildCatUtils = {
                     Log.print("Exception : " + JSON.stringify(e));
                     props.cb("the response is not in JSON format", JSON.stringify(resBody));
                 }
-
-                if (response && resBody.toString('utf-8').length > 10000)  responseText = "responseText is too long... you can find it in your network tab." ;
-                else responseText = response.body.toString('utf-8');
-                Log.print("<--- RESPONSE status " + response.statusCode + " " + url + " " + responseText);
-                if (response.statusCode == 200) {props.cb(null, responseText, response);}
+                var requestToPrint
+                if (response && resBody.toString('utf-8').length > 10000)  requestToPrint = "responseText is too long... you can find it in your network tab." ;
+                responseText = response.body.toString('utf-8');
+                Log.print("<--- RESPONSE status " + response.statusCode + " " + url + " " + requestToPrint);
+                if (response.statusCode == 200) {
+                    props.cb(null, responseText, response);
+                }
                 else {
                     props.cb(ErrorHandler(resBody.status), null,response);
                 }
             }
             else {
 
-                Log.print("The request failed." + JSON.stringify(xhr) +   JSON.stringify(e));
                 props.cb(ErrorHandler(`Wildcat didn't succeed to receive response. Please check if the server is up : ${currentConfig.host}`), null);
             }
 
@@ -190,7 +191,7 @@ function deepCopy(oldObj,att) {
 
 
 function _buildUrl(relPath, absPath){
-    var isAppiumCmd = (relPath && relPath.indexOf("screenshot") > 0)||(relPath && relPath.indexOf("appium") > 0) || (absPath && absPath.indexOf("appium") > 0) ? true : false;
+    var isAppiumCmd = (relPath && relPath.indexOf("appium") > 0) || (absPath && absPath.indexOf("appium") > 0) ? true : false;
     var sessionNow = "nosession";
     var path;
 
