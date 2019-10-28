@@ -4,7 +4,7 @@
 var ErrorHandler = require("./ErrorHandler.js");
 var Log = require("./CustomLogger.js");
 
-var blankCB = function(err,data){data ? Log.print(data) : Log.print("Blank callback without data")};
+var blankCB = function(err,data){data ? Log.print(data) : Logger.debug("Blank callback without data")};
 
 var callbacks = {
     //we didn't expect response data
@@ -13,7 +13,8 @@ var callbacks = {
         return function(err, data){
             //cleanup rule
             if(err) return cb(err, null);
-            Log.print("******* in the callback function --> _basic");
+         //  Log.print("******* in the callback function --> _basic");
+            Logger.debug("******* in the callback function --> _basic");
             //we expect that there is not a data at the responce
             if(data === '' || (data === 'OK') || data === true || !data){
                 cb(null,null);
