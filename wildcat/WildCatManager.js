@@ -40,7 +40,8 @@ var WildCatUtils = {
 
             currentConfig["host"] = platform === "chrome" ? currentConfig["selenium_IP"] : currentConfig["Appium_IP"];
 
-            Log.print("We are using the follow configuration now " +  JSON.stringify(currentConfig));
+            Logger.debug("We are using the follow configuration now " +  JSON.stringify(currentConfig));
+            //Log.print("We are using the follow configuration now " +  JSON.stringify(currentConfig));
             //Log.print("The used capabilities are device is "       +  JSON.stringify(caps));
             return currentConfig;
         },
@@ -105,10 +106,12 @@ var WildCatUtils = {
 
 
 
-            Log.print("before sending request " + url );
+          Logger.debug("before sending request " + url );
+           // Log.print("before sending request " + url );
             var headers = {"Accept": "application/json","Content-type": "application/json"}
             var response = request(props.method, url, {headers:headers, timeout:10000, body:props.data});
-            Log.print("---> REQUEST " + props.method + " " + url + " data: " + JSON.stringify(props.data));
+            Logger.debug("---> REQUEST " + props.method + " " + url + " data: " + JSON.stringify(props.data));
+            // Log.print("---> REQUEST " + props.method + " " + url + " data: " + JSON.stringify(props.data));
 
 
             if (response) {
@@ -122,7 +125,8 @@ var WildCatUtils = {
                 var requestToPrint
                 if (response && resBody.toString('utf-8').length > 10000)  requestToPrint = "responseText is too long... you can find it in your network tab." ;
                 responseText = response.body.toString('utf-8');
-                Log.print("<--- RESPONSE status " + response.statusCode + " " + url + " " + requestToPrint);
+               Logger.debug("<--- RESPONSE status " + response.statusCode + " " + url + " " + requestToPrint);
+               // Log.print("<--- RESPONSE status " + response.statusCode + " " + url + " " + requestToPrint);
                 if (response.statusCode == 200) {
                     props.cb(null, responseText, response);
                 }
