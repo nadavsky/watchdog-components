@@ -288,7 +288,9 @@ var commands = {
 
 
     getSession : function(createNewSession){
-        console.log("on get session................")
+        Logger.debug("on get session................")
+       // Log.print("on get session................")
+
         //var currentConfig = utils.init();
         /*utils.sendRequest('GET','/sessions',  callb.withData(function(err,obj){
             if(!err){
@@ -301,7 +303,8 @@ var commands = {
         }
         else{
             utils.sendRequest('POST','/session',  callb.withData(function(err,obj){
-                console.log("after POST request in get session");
+                //console.log("after POST request in get session");
+                Logger.debug("after POST request in get session");
                 if(!err && obj["sessionId"]){
                     session = obj["sessionId"];
                     utils.setSessionId(session);
@@ -315,9 +318,9 @@ var commands = {
 
     },
     useSession: function(name){
-        debugger
         var session = getPref("wildcat_sessions")[name];
-        console.log("use session : " + session)
+       Logger.debug("use session : " + session)
+       //console.log("use session : " + session)
         setPref("wildcat_current_session", session);
         return session;
 
@@ -404,7 +407,8 @@ var commands = {
                 method: 'POST',
                 relPath: '/session/' + session +'/element/' + context + '/elements',
                 cb: callb.withData(function(err, obj){
-                    Log.print(err);
+                    Logger.debug(err);
+                    //Log.print(err);
                     if(err) commands.tryToRecconnect(err);
                     if(obj && obj.value && obj.value.length){
                         element=obj.value[0]["ELEMENT"];
@@ -421,7 +425,8 @@ var commands = {
                 method: 'POST',
                 relPath: '/session/' + session +'/element',
                 cb: callb.withData(function(err, value){
-                    Log.print(err);
+                    Logger.debug(err);
+                    //Log.print(err);
                     if(err) commands.tryToRecconnect(err);
                     if(value && value.value && value.value && value.hasOwnProperty("value")){
                         element=value.value["ELEMENT"];
@@ -432,7 +437,9 @@ var commands = {
                 data: data
             });
         }
-        console.log("in find elem, element = "+ element)
+       Logger.debug("in find elem, element = "+ element)
+       //console.log("in find elem, element = "+ element)
+
         return element ? [element] : [];
    },
 
