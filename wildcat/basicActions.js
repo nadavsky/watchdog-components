@@ -49,6 +49,7 @@ module.exports.registerComponent([
         "waitForElement": ["target", "timeout", "context"],
         "navigateTo": ["url"],
         "maximize_window": [],
+        "set_window_size":["width","height"],
         "toggleWiFi": [],
         "toggleAirplaneMode": [],
         "createSession": ["name"],
@@ -355,6 +356,15 @@ module.exports.registerComponent([
                     });
                 });
             },
+
+        set_window_size: function (action) {
+            cmd("set_window_size...", function (a) {
+                wildcatUtils.set_window_size(action.args.width,action.args.height,{}, function (endAction, str, Obj) {
+                    if (Obj.value && Obj.value["message"]) action.verifyThat.fatal("failed to set_window_size : " + Obj.value["message"]);
+                    a.end();
+                });
+            });
+        },
             toggleWiFi: function (action) {
                 cmd("toggle WiFi", function (a) {
                     wildcatUtils.NativeActions.toggleWifi(function (endAction, str, Obj) {
