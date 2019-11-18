@@ -32,7 +32,8 @@
         //env         =  Dev, QA_Beta, QA_Stable ...
         //serverName =  appium/crosswalk
         getCaps: function(platform,env,device,serverName){
-            Log.print("in get caps, platform =" + platform + ", env =" + env + ", device =" + device + ", serverName =" + serverName );
+          //  Log.print("in get caps, platform =" + platform + ", env =" + env + ", device =" + device + ", serverName =" + serverName );
+             Logger.debug("in get caps, platform =" + platform + ", env =" + env + ", device =" + device + ", serverName =" + serverName );
             var currentCaps =  {};
              if (platform === 'ios' || platform === 'Android') {
                 currentCaps["platformName"]= platform;
@@ -54,7 +55,8 @@
             }
 
 
-            Log.print("the choosen caps are " + JSON.stringify(currentCaps));
+           // Log.print("the choosen caps are " + JSON.stringify(currentCaps));
+            Logger.debug("the choosen caps are " + JSON.stringify(currentCaps));
             return currentCaps;
         },
 
