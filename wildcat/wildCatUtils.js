@@ -756,7 +756,18 @@ var commands = {
        });
        return value;
 
-   }
+   },
+
+    set_window_size: function(width,height,data, cb){
+        var session = commands.getSession();
+        var window_handle = commands.getLastOpenedWindowId()
+        utils.sendRequest({
+            method: 'POST',
+            relPath: '/session/' + session + '/window/' + window_handle + '/size',
+            cb: function(non,resString,respObj){cb(non,resString,respObj)},
+            data: JSON.stringify({width:width,height:height})
+        });
+    },
 
 };
 
