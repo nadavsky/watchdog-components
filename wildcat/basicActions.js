@@ -28,6 +28,7 @@ module.exports.registerComponent([
     name: "basicActions",
     argsMap: {
         "click": ["target", "context", "props"],
+        "moveMouse":["target","props"],
         "type": ["target", "value", "context", "props"],
         "typeOnly": ["target", "value", "context", "props"],
         "clearContent": ["target", "context"],
@@ -71,6 +72,22 @@ module.exports.registerComponent([
                     );
                 });
             },
+            moveMouse: function (action) {
+                cmd("moveMouse " + action.args.target, function (a) {
+                    a.findTarget(
+                        function () {
+                            return wildcatUtils.findElem(action.args.target, action.args.context);
+                        },
+                        function (elem) {
+                            console.log("elemm1:"+elem)
+                            console.log("elemm2:"+JSON.stringify(elem))
+                            wildcatUtils.moveMouse(elem, a.end);
+                        }
+                    );
+                });
+            },
+
+
             type: function (action) {
                 cmd("type '" + action.args.value + "' in '" + action.args.target + "'", function (a) {
                     a.findTarget(
