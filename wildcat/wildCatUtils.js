@@ -536,6 +536,24 @@ var commands = {
 
     },
 
+    moveMouse : function(elem,cb) {
+        console.log("elem: "+elem)
+        // var data = JSON.stringify(ElemStrategies(elemSelector));
+        var session = this.getSession();
+            utils.sendRequest({
+                method: 'POST',
+                relPath: '/session/' + session +'/moveto',
+                cb:callb.basic(cb),
+                // data: elemSelector
+                data: JSON.stringify({element:elem})
+            });
+
+        // Logger.debug("in find elem, element = "+ element)
+        // //console.log("in find elem, element = "+ element)
+        //
+        // return element ? [element] : [];
+    },
+
    type :function(elem, value,cb,elemId){
        function checkUnicode(value) {
            return unicodeChars.hasOwnProperty(value) ? [unicodeChars[value]] : value.split('');
@@ -744,7 +762,8 @@ var commands = {
    },
 
    screenshot: function(cb) {
-       var session= utils.getSessionId();
+       var session = this.getSession();
+       console.log("session: "+session)
        var value;
        //utils.sendRequest('GET', '/session/' + session + '/screenshot', callb.withData(cb),{})
        utils.sendRequest({
