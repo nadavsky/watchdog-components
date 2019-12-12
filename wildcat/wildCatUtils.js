@@ -537,7 +537,6 @@ var commands = {
     },
 
     moveMouse : function(elem,cb) {
-        console.log("elem: "+elem)
         // var data = JSON.stringify(ElemStrategies(elemSelector));
         var session = this.getSession();
             utils.sendRequest({
@@ -763,7 +762,6 @@ var commands = {
 
    screenshot: function(cb) {
        var session = this.getSession();
-       console.log("session: "+session)
        var value;
        //utils.sendRequest('GET', '/session/' + session + '/screenshot', callb.withData(cb),{})
        utils.sendRequest({
