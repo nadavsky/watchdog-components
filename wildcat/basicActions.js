@@ -79,8 +79,6 @@ module.exports.registerComponent([
                             return wildcatUtils.findElem(action.args.target, action.args.context);
                         },
                         function (elem) {
-                            console.log("elemm1:"+elem)
-                            console.log("elemm2:"+JSON.stringify(elem))
                             wildcatUtils.moveMouse(elem, a.end);
                         }
                     );
