@@ -40,10 +40,11 @@
                 currentCaps["platformVersion"]= getPref("watchdog.wildcat.platformVersion");
                 currentCaps = mergeOptions(config[platform].general, currentCaps);
                 currentCaps["deviceName"] = getPref("watchdog.wildcat.deviceName");
-                currentCaps["automationName"] = "Appium";
+                currentCaps["automationName"] = "UiAutomator2";
                 currentCaps["env"]= env;
                 currentCaps["appPackage"] = getPref("watchdog.wildcat.appPackage");
                 currentCaps["appActivity"] = getPref("watchdog.wildcat.appActivity");
+                currentCaps["appWaitActivity"] = getPref("watchdog.wildcat.appActivity");
              }
             if (platform === 'Android'){
                 currentCaps["nativeWebScreenshot"] = true;
